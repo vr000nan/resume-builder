@@ -1,16 +1,18 @@
 import React from "react";
-import { ReactDOM } from "react";
-// ^might need to to change to "react-dom/client";
+import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
 import { App } from "./containers";
 
 import "./index.css";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-         <React.StrictMode>
+document.addEventListener("DOMContentLoaded", function() {
+    const root = document.getElementById("root");
+    ReactDOM.render(
+        <React.StrictMode>
             <Router>
                 <App />
             </Router>
-         </React.StrictMode>
-);
+        </React.StrictMode>,
+        root
+    );
+});
