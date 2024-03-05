@@ -3,6 +3,8 @@ import { Logo } from "../assets";
 import { Footer } from '../containers';
 import { AuthButtonWithProvider } from '../components';
 
+import { FaGoogle, FaGithub } from "react-icons/fa6";
+
 const Authentication = () => {
   return (
     <div className="auth-section">
@@ -15,9 +17,8 @@ const Authentication = () => {
         <p className="text-base text-gray-600">express way to create resume</p>
         <h2 className="text-2xl text-gray-600">Authenticate</h2>
         <div className="w-full lg:w-96 rounded-md p-2 flex flex-col items-center justify-start gap-6">
-          <AuthButtonWithProvider />
-          <AuthButtonWithProvider />
-          <AuthButtonWithProvider />
+          <AuthButtonWithProvider Icon={FaGoogle} label={"Sign In With Google"} provider={"GoogleAuthProvider"}/>
+          <AuthButtonWithProvider Icon={FaGithub} label={"Sign In With Github"} provider={"GithubAuthProvider"}/>
         </div>
       </div>
 
