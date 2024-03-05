@@ -8,6 +8,7 @@ const Authentication = () => {
         <img src={ Logo } className="w-12 h-auto object-contain" alt="Logo" />
 
         {/* main section */}
+        {/* start here tomorrow, 40.51 */}
 
     </div>
   )
