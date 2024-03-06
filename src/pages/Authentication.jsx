@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Logo } from "../assets";
 import { Footer } from '../containers';
-import { AuthButtonWithProvider } from '../components';
+import { AuthButtonWithProvider, MainSpinner } from '../components';
 
 import { FaGoogle, FaGithub } from "react-icons/fa6";
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +17,11 @@ const Authentication = () => {
       navigate("/", { replace: true });
     }
   }, [isLoading, data])
+
+  if(isLoading){
+    // make sure this is working, 1.55.00
+    return <MainSpinner />
+  }
 
   return (
     <div className="auth-section">
