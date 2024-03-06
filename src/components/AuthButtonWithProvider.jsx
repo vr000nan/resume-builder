@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaChevronRight } from 'react-icons/fa6';
-import { GoogleAuthProvider, GithubAuthProvider } from "firebase/auth";
+import { GoogleAuthProvider, GithubAuthProvider, signInWithRedirect } from "firebase/auth";
+import { auth } from "../config/firebase.config";
 
 const AuthButtonWithProvider = ({Icon, label, provider}) => {
     const googleAuthProvider = new GoogleAuthProvider();
@@ -9,15 +10,27 @@ const AuthButtonWithProvider = ({Icon, label, provider}) => {
     const handleClick = async () => {
         switch(provider){
             case "GoogleAuthProvider":
-                console.log("Google Auth")
+                await signInWithRedirect(auth, googleAuthProvider).then((result) => {
+                    console.log(result)
+                }).catch((err) => {
+                    console.log(`*ERROR!* ${err.Message}`);
+                });
                 break;
 
             case "GithubAuthProvider":
-                console.log("Github Auth")
+                await signInWithRedirect(auth, githubAuthProvider).then((result) => {
+                    console.log(result)
+                }).catch((err) => {
+                    console.log(`*ERROR!* ${err.Message}`);
+                });
                 break;
             
             default:
-                console.log("Default case")
+                await signInWithRedirect(auth, googleAuthProvider).then((result) => {
+                    console.log(result)
+                }).catch((err) => {
+                    console.log(`*ERROR!* ${err.Message}`);
+                });
                 break;
         }
     };
