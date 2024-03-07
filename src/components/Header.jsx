@@ -9,6 +9,7 @@ import { HiLogout } from "react-icons/hi";
 import { fadeInOutWithOpacity, slideUpDownMenu } from '../animations';
 import { auth } from '../config/firebase.config';
 import { useQueryClient } from 'react-query';
+import { adminIds } from '../utils/helpers';
 
 const Header = () => {
     const { data, isLoading, isError } = useUser();
@@ -89,7 +90,8 @@ const Header = () => {
                         {/* menus */}
                             <div className="w-full flex-col items-start flex gap-8 pt-6">
                                 <Link className="text-txtLight hover:text-txtDark text-base whitespace-nowrap" to={"/profile"}>My Account</Link>
-                                <Link className="text-txtLight hover:text-txtDark text-base whitespace-nowrap" to={"/template/create"}>Add New Template</Link>
+
+                                {adminIds.includes(data?.uid) && (<Link className="text-txtLight hover:text-txtDark text-base whitespace-nowrap" to={"/template/create"}>Add New Template</Link>)}
 
                                 <div className="w-full px-2 py-2 border-t border-gray-300 flex items-center justify-between group cursor-pointer" onClick={signOutUser}>
                                     <p className="group-hover:text-txtDark text-txtLight">Sign Out</p>
