@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from '../config/firebase.config';
 import { progress } from 'framer-motion';
+import { initialTags } from '../utils/helpers';
 
 const CreateTemplate = () => {
   const [formData, setFormData] = useState({
@@ -24,6 +25,8 @@ const CreateTemplate = () => {
     url : null,
     progress : 0
   });
+
+  const [selectedTags, setSelectedTags] = useState([]);
 
   // handle the image file changes
   const handleFileSelect = async(e) => {
@@ -97,6 +100,17 @@ const CreateTemplate = () => {
     }
   };
 
+  const handleSelectedTags = (tag) => {
+    // check if the tag is selected or not
+    if (selectedTags.includes(tag)){
+      // if selected then remove it
+      setSelectedTags(selectedTags.filter(selected => selected != tag));
+    }else{
+      setSelectedTags([...selectedTags, tag]);
+    }
+  }
+
+
   return (
     <div className="w-full px-4 lg:px-10 2xl:px-32 py-4 grid grid-cols-1 lg:grid-cols-12">
       {/* left container */}
@@ -126,7 +140,7 @@ const CreateTemplate = () => {
         />
 
         {/* file uploader section */}
-        <div className="w-full bg-gray-100 backdrop-blur-md h-[420px] lg:h-[620px} 2xl:h-[740px] rounded-md border-2 border-dotted border-gray-300 cursor-pointer flex items-center justify-center">
+        <div className="w-full bg-gray-100 backdrop-blur-md h-[420px] lg:h-[620px] 2xl:h-[740px] rounded-md border-2 border-dotted border-gray-300 cursor-pointer flex items-center justify-center">
           {imageAsset.isImageLoading ? (
           <React.Fragment>
             <div className="flex flex-col items-center justify-center gap-4">
@@ -177,9 +191,19 @@ const CreateTemplate = () => {
           </React.Fragment>
           )}
         </div>
-      </div>
 
-
+        {/* tags */}
+        <div className="w-full flex items-center flex-wrap gap-2">
+              {initialTags.map((tag, i) => (
+                <div key={i} 
+                className={`border border-gray-300 px-2 py-2 rounded-md cursor-pointer ${selectedTags.includes(tag)? "bg-blue-500 text-white" : ""}`}
+                onClick={() => handleSelectedTags(tag)}
+                >
+                  <p>{tag}</p>
+                </div>
+              ))}
+        </div>
+        </div>
 
       {/* right container */}
       <div className="col-span-12 lg:col-span-8 2xl:col-span-9">Right Side</div>
