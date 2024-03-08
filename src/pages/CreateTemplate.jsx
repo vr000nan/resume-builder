@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
-import { FaUpload } from 'react-icons/fa6';
+import { FaTrash, FaUpload } from 'react-icons/fa6';
 import { PuffLoader } from 'react-spinners';
+import { toast } from 'react-toastify';
+
+import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { storage } from '../config/firebase.config';
+import { progress } from 'framer-motion';
 
 const CreateTemplate = () => {
   const [formData, setFormData] = useState({
@@ -20,10 +25,77 @@ const CreateTemplate = () => {
     progress : 0
   });
 
+  // handle the image file changes
   const handleFileSelect = async(e) => {
+    setImageAsset((prevAsset) => ({...prevAsset, isImageLoading: true}));
     const file = e.target.files[0];
-    console.log("FILE", file)
+
+    if(file && isAllowed(file)){
+      const storageRef = ref(storage, `Templates/${Date.now()}-${file.name}`);
+
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          setImageAsset((prevAsset) => ({
+            ...prevAsset, 
+            progress : (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
+          }))
+        },
+        (error) => {
+          if(error.message.includes("storage/unauthorized")){
+            toast.error(`Error : Authorization Revoked`)
+          } else {
+            toast.error(`Error: ${error.message}`)
+          }
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
+            setImageAsset((prevAsset) => ({
+              ...prevAsset,
+              url: downloadURL,
+            }));
+          });
+          toast.success("Image uploaded!");
+          setInterval(() => {
+            setImageAsset((prevAsset) => ({
+              ...prevAsset,
+              isImageLoading: false,
+            }));
+            }, 2000);
+          });
+    } else {
+      toast.info("Invalid File Format");
+    }
+  };
+
+  const isAllowed = (file) => {
+    const allowedTypes = ["image/jpeg", "image/jpg", "image/png"]
+    return allowedTypes.includes(file.type)
   }
+
+  // to delete an image from the cloud
+  const deleteAnImageObject = async () => {
+    if (imageAsset.url) {
+      const storageRef = ref(storage, imageAsset.url);
+      deleteObject(storageRef)
+        .then(() => {
+          toast.success("Image removed!");
+          setImageAsset((prevAsset) => ({
+            ...prevAsset,
+            progress: 0,
+            url: null,
+          }));
+        })
+        .catch((error) => {
+          console.error("Error deleting image:", error);
+          toast.error("Error deleting image. Please try again later.");
+        });
+    } else {
+      toast.error("No image to delete.");
+    }
+  };
 
   return (
     <div className="w-full px-4 lg:px-10 2xl:px-32 py-4 grid grid-cols-1 lg:grid-cols-12">
@@ -84,7 +156,22 @@ const CreateTemplate = () => {
             </React.Fragment>
             ): (
               <React.Fragment>
+                <div className="relative w-full h-full overflow-hidden rounded-md">
+                  <img
+                    src={imageAsset.url}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    alt="Image Loading"
+                  />
 
+                  {/* delete action */}
+                  <div className="absolute top-4 right-4 w-8 h-8 rounded-md flex items-center justify-center bg-red-500 cursor-pointer">
+                    <FaTrash 
+                    className="text-sm text-white"
+                    onClick={deleteAnImageObject}
+                     />
+                  </div>
+                </div>
               </React.Fragment>
             )}
           </React.Fragment>
