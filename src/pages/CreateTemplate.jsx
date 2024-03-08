@@ -4,9 +4,10 @@ import { PuffLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { storage } from '../config/firebase.config';
-import { progress } from 'framer-motion';
+import { storage, db } from '../config/firebase.config';
 import { initialTags } from '../utils/helpers';
+import { serverTimestamp, doc, setDoc } from 'firebase/firestore';
+import { useTemplates } from "../hooks/useTemplates"
 
 const CreateTemplate = () => {
   const [formData, setFormData] = useState({
@@ -27,6 +28,8 @@ const CreateTemplate = () => {
   });
 
   const [selectedTags, setSelectedTags] = useState([]);
+
+  const { data : templates, isError : templatesIsError, isLoading : templatesIsLoading, refetch : templatesRefetch } = useTemplates();
 
   // handle the image file changes
   const handleFileSelect = async(e) => {
@@ -108,7 +111,36 @@ const CreateTemplate = () => {
     }else{
       setSelectedTags([...selectedTags, tag]);
     }
-  }
+  };
+
+  const pushToCloud = async () => {
+    const timestamp = serverTimestamp();
+    const id = `${Date.now()}`;
+    const _doc = {
+      _id: id,
+      title: formData.title,
+      imageURL: imageAsset.url,
+      tags: selectedTags,
+      name:
+        templates && templates.length > 0
+          ? `Template${templates.length + 1}`
+          : "Template1",
+      timestamp: timestamp,
+    };
+  
+    await setDoc(doc(db, "templates", id), _doc)
+      .then(() => {
+        setFormData((prevData) => ({ ...prevData, title: "", imageURL: "" }));
+        setImageAsset((prevAsset) => ({ ...prevAsset, uri: null }));
+        setSelectedTags([]);
+        templatesRefetch(); // Refetch templates to update the state
+        toast.success("Data pushed to the cloud");
+      })
+      .catch((error) => {
+        toast.error(`Error: ${error.message}`);
+      });
+  };
+  
 
 
   return (
@@ -125,7 +157,8 @@ const CreateTemplate = () => {
             TEMP: {" "}
           </p>
           <p className="text-sm text-txtDark capitalize font-bold">
-            TEMPLATE 1
+            {templates && templates.length > 0 ? 
+            `Template${templates.length + 1}` : "Template1"}
           </p>
         </div>
 
@@ -203,6 +236,15 @@ const CreateTemplate = () => {
                 </div>
               ))}
         </div>
+
+        {/* button action */}
+        <button 
+          type="button"
+          className="w-full bg-blue-700 text-white rounded-md py-3"
+          onClick={pushToCloud}
+        >
+          Save
+        </button>
         </div>
 
       {/* right container */}
