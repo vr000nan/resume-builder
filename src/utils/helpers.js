@@ -1,4 +1,4 @@
-export const adminIds = ["116066160874334281494", "25000924"];
+export const adminIds = ["113337183276828721756", "25000924"];
 
 export const initialTags = [
   "Software Engineer",
