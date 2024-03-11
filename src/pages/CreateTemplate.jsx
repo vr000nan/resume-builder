@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaTrash, FaUpload } from 'react-icons/fa6';
 import { PuffLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage, db } from '../config/firebase.config';
-import { initialTags } from '../utils/helpers';
+import { adminIds, initialTags } from '../utils/helpers';
 import { serverTimestamp, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { useTemplates } from "../hooks/useTemplates";
+import { useUser } from "../hooks/useUser";
+import { useNavigate } from 'react-router-dom';
 
 const CreateTemplate = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +25,10 @@ const CreateTemplate = () => {
   const [selectedTags, setSelectedTags] = useState([]);
 
   const { data: templates, isError: templatesIsError, isLoading: templatesIsLoading, refetch: templatesRefetch } = useTemplates();
+
+  const {data : user, isLoading} = useUser();
+
+  const navigate = useNavigate();
 
   // handling the input field change
   const handleInputChange = (e) => {
@@ -153,6 +159,12 @@ const CreateTemplate = () => {
       });
     })
   };
+  
+  useEffect(() => {
+    if(!isLoading && !adminIds.includes(user?.uid)){
+      navigate("/", { replace: true });
+    }
+  }, [user, isLoading]);
 
   return (
     <div className="w-full px-4 lg:px-10 2xl:px-32 py-4 grid grid-cols-1 lg:grid-cols-12">
