@@ -256,6 +256,7 @@ const CreateTemplate = () => {
             <React.Fragment>
               {templates && templates.length > 0 ? (
                 <React.Fragment>
+                  <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
                   {templates?.map((template) => (
                     <div
                       key={template._id}
@@ -268,11 +269,12 @@ const CreateTemplate = () => {
                       />
                     </div>
                   ))}
+                  </div>
                 </React.Fragment>
               ) : (
                 <React.Fragment>
                   <div className="w-full h-full flex flex-col gap-6 items-center justify-center">
-                    {/* <PuffLoader color="#498FCD" size={40}/> do we need this?*/}
+                    <PuffLoader color="#498FCD" size={40}/>
                     <p className="text-xl tracking-wider capitalize text-txtPrimary">
                       No data
                     </p>
