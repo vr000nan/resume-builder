@@ -11,7 +11,7 @@ import { useTemplates } from "../hooks/useTemplates";
 const CreateTemplate = () => {
   const [formData, setFormData] = useState({
     title: "",
-    imageURL: null
+    imageURL: null,
   });
 
   const [imageAsset, setImageAsset] = useState({
@@ -130,7 +130,7 @@ const CreateTemplate = () => {
     await setDoc(doc(db, "templates", id), _doc)
       .then(() => {
         setFormData((prevData) => ({ ...prevData, title: "", imageURL: "" }));
-        setImageAsset((prevAsset) => ({ ...prevAsset, uri: null, url: null })); // <-- Update imageURL to null after pushing to the cloud
+        setImageAsset((prevAsset) => ({ ...prevAsset, url: null, url: null })); // <-- Update imageURL to null after pushing to the cloud
         setSelectedTags([]);
         templatesRefetch(); // Refetch templates to update the state
         toast.success("Data pushed to the cloud");
@@ -155,14 +155,14 @@ const CreateTemplate = () => {
           </p>
           <p className="text-sm text-txtDark capitalize font-bold">
             {templates && templates.length ? 
-            `Template${templates.length + 1}` : "Template1"}
+            `Template${templates.length + 1}` : "TEST"}
             {/* it's breaking here somewhere */}
           </p>
         </div>
 
         {/* template title section */}
         <input
-          className="w-full px-4 py-3 rounded-md bg-transparent border border-gray-300 text-txtPrimary focus:text-txtDark focus:shadow-md outline-nons"
+          className="w-full px-4 py-3 rounded-md bg-transparent border border-gray-300 text-lg text-txtPrimary focus:text-txtDark focus:shadow-md outline-none"
           type="text"
           name="title"
           placeholder="Template Title"
@@ -176,7 +176,7 @@ const CreateTemplate = () => {
             <React.Fragment>
               <div className="flex flex-col items-center justify-center gap-4">
                 <PuffLoader color="#498FCD" size={40} />
-                <p>{imageAsset?.progress.toFixed(2)}%</p>
+                <p>{imageAsset?.progress.toFixed(1)}%</p>
               </div>
             </React.Fragment>
           ) : (
@@ -203,7 +203,7 @@ const CreateTemplate = () => {
                 <React.Fragment>
                   <div className="relative w-full h-full overflow-hidden rounded-md">
                     <img
-                      src={imageAsset.url}
+                      src={imageAsset?.url}
                       className="w-full h-full object-cover"
                       loading="lazy"
                       alt="Image Loading"
