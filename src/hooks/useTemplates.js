@@ -8,7 +8,7 @@ export const useTemplates = () => {
         async () => {
             try {
                 const templates = await getTemplates();
-                console.log("TEMPLATE", templates)
+                return templates
             } catch(err) {
                 console.log("useTemplates Error: ", err);
                 toast.error("Something went wrong.");

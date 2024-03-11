@@ -151,7 +151,7 @@ const CreateTemplate = () => {
         {/* template ID section */}
         <div className="w-full flex items-center justify-end">
           <p className="text-base text-txtLight uppercase font-semibold">
-            TEMP: {" "}
+            TEMPID: {" "}
           </p>
           <p className="text-sm text-txtDark capitalize font-bold">
             {templates && templates.length ? 
@@ -230,7 +230,7 @@ const CreateTemplate = () => {
               className={`border border-gray-300 px-2 py-2 rounded-md cursor-pointer ${selectedTags.includes(tag) ? "bg-blue-500 text-white" : ""}`}
               onClick={() => handleSelectedTags(tag)}
             >
-              <p>{tag}</p>
+              <p className="text-sm">{tag}</p>
             </div>
           ))}
         </div>
