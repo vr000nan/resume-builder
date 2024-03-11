@@ -50,7 +50,7 @@ const CreateTemplate = () => {
         },
         (error) => {
           if (error.message.includes("storage/unauthorized")) {
-            toast.error(`Error : Authorization Revoked`);
+            toast.error(`Error : Authorization Revoked.`);
           } else {
             toast.error(`Error: ${error.message}`);
           }
@@ -71,7 +71,7 @@ const CreateTemplate = () => {
           }, 2000);
         });
     } else {
-      toast.info("Invalid File Format");
+      toast.info("Invalid File Format.");
     }
   };
 
@@ -94,7 +94,7 @@ const CreateTemplate = () => {
           }));
         })
         .catch((error) => {
-          console.error("Error deleting image:", error);
+          console.error("Error deleting image: ", error);
           toast.error("Error deleting image. Please try again later.");
         });
     } else {
@@ -133,7 +133,7 @@ const CreateTemplate = () => {
         setImageAsset((prevAsset) => ({ ...prevAsset, url: null, url: null })); // <-- Update imageURL to null after pushing to the cloud
         setSelectedTags([]);
         templatesRefetch(); // Refetch templates to update the state
-        toast.success("Data pushed to the cloud");
+        toast.success("Data pushed to the cloud!");
       })
       .catch((error) => {
         toast.error(`Error: ${error.message}`);
@@ -155,8 +155,7 @@ const CreateTemplate = () => {
           </p>
           <p className="text-sm text-txtDark capitalize font-bold">
             {templates && templates.length ? 
-            `Template${templates.length + 1}` : "TEST"}
-            {/* it's breaking here somewhere */}
+            `Template${templates.length + 1}` : "Template1"}
           </p>
         </div>
 
