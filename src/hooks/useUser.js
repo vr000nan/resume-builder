@@ -2,7 +2,7 @@ import { useQuery } from "react-query"
 import { toast } from "react-toastify"
 import { getUserDetail } from "../api";
 
-const useUser = () => {
+export const useUser = () => {
     const { data, isLoading, isError, refetch } = useQuery(
         "user",
         async () => {
