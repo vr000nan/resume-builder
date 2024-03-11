@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { deleteObject, getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage, db } from '../config/firebase.config';
 import { initialTags } from '../utils/helpers';
-import { serverTimestamp, doc, setDoc } from 'firebase/firestore';
+import { serverTimestamp, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { useTemplates } from "../hooks/useTemplates";
 
 const CreateTemplate = () => {
@@ -140,6 +140,20 @@ const CreateTemplate = () => {
       });
   };
 
+  // removes data from cloud
+  const removeTemplate = async (template) => {
+    const deleteRef = ref(storage, template?.imageURL);
+
+    await deleteObject(deleteRef).then(async() => {
+      await deleteDoc(doc(db, "templates", template?._id)).then(() => {
+        toast.success("Template deleted from the cloud!")
+        templatesRefetch()
+      }).catch(err => {
+        toast.error(`Error: ${err.message}`);
+      });
+    })
+  };
+
   return (
     <div className="w-full px-4 lg:px-10 2xl:px-32 py-4 grid grid-cols-1 lg:grid-cols-12">
       {/* left container */}
@@ -262,11 +276,20 @@ const CreateTemplate = () => {
                       key={template._id}
                       className="w-full h-[500px] rounded-md overflow-hidden relative"
                     >
+                      {/* {template?.title} might bring this back, idk yet */}
                       <img
                         src={template?.imageURL}
                         alt="User Uploaded Image"
                         className="w-full h-full object-cover"
                       />
+
+                      {/* delete action */}
+                      <div className="absolute top-4 right-4 w-8 h-8 rounded-md flex items-center justify-center bg-red-500 cursor-pointer">
+                        <FaTrash
+                          className="text-sm text-white"
+                          onClick={() => {removeTemplate(template)}}
+                        />
+                      </div>
                     </div>
                   ))}
                   </div>
