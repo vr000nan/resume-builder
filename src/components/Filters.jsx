@@ -24,7 +24,14 @@ const Filters = () => {
       ...queryClient.getQueryData("globalFilter"),
       searchTerm: value,
     })
-  }
+  };
+
+  const clearFilter = () => {
+    queryClient.setQueryData("globalFilter", {
+        ...queryClient.getQueryData("globalFilter"),
+        searchTerm: "",
+        });
+};
 
   return (
     <div className="w-full flex items-center justify-start py-4">
@@ -40,6 +47,7 @@ const Filters = () => {
            <motion.div 
            {...slideUpDownWithScale}
            className="absolute -top-8 -left-2 bg-white shadow-md rounded-md px-2 py-1"
+           onClick={clearFilter}
            >
              <p className="whitespace-nowrap text-xs">Clear All</p>
            </motion.div>
