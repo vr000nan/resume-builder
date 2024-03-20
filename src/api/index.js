@@ -52,7 +52,7 @@ export const saveToCollections = async (user, data) => {
         await updateDoc(docRef, {
             collections: arrayUnion(data?._id)
         }).then(() => {
-            toast.success("Saved to Collections")
+            toast.success("Added to Collections")
         }).catch((err) => {
             toast.error(`Error: ${err.message}`)
         });
@@ -68,3 +68,28 @@ export const saveToCollections = async (user, data) => {
         });
     }
 };
+
+export const saveToFavorites = async (user, data) => {
+    if(!data?.favorites?.includes(user?.uid)){
+        const docRef = doc(db, "templates", data?._id)
+
+        await updateDoc(docRef, {
+            favorites: arrayUnion(user?.uid)
+        }).then(() => {
+            toast.success("Added to Favorites")
+        }).catch((err) => {
+            toast.error(`Error: ${err.message}`)
+        });
+    } else{
+        const docRef = doc(db, "templates", data?._id)
+
+        await updateDoc(docRef, {
+            favorites: arrayRemove(user?.uid)
+        }).then(() => {
+            toast.success("Removed from Favorites")
+        }).catch((err) => {
+            toast.error(`Error: ${err.message}`)
+        });
+    }
+};
+

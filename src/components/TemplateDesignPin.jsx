@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { fadeInOutWithOpacity, scaleInOut } from '../animations';
-import { BiFolderPlus, BiHeart, BiSolidFolderPlus } from "react-icons/bi";
+import { BiFolderPlus, BiHeart, BiSolidFolderPlus, BiSolidHeart } from "react-icons/bi";
 import useUser from "../hooks/useUser";
-import { saveToCollections } from '../api';
+import useTemplates from "../hooks/useTemplates"
+import { saveToCollections, saveToFavorites } from '../api';
 
 const TemplateDesignPin = ({ data, index }) => {
-    const {data: user, refetch : userRefetch} = useUser()
+    const {data: user, refetch : userRefetch} = useUser();
+    const { refetch: temp_Refetch } = useTemplates();
 
     const addToCollection = async(e) => {
         e.stopPropagation();
@@ -14,8 +16,10 @@ const TemplateDesignPin = ({ data, index }) => {
         userRefetch();
     };
 
-    const addToFavorites = async() => {
-
+    const addToFavorites = async(e) => {
+        e.stopPropagation();
+        await saveToFavorites(user, data);
+        temp_Refetch();
     };
 
   return (
@@ -50,8 +54,15 @@ const TemplateDesignPin = ({ data, index }) => {
                         />
 
                         <InnerBoxCard 
-                        label={"Add To Favorites"} 
-                        Icon={BiHeart} 
+                        label={
+                            data?.favorites?.includes(user?.uid)
+                             ? "Added to Favoritess" 
+                             : "Add to Favoritess"
+                            } 
+                        Icon={
+                            data?.favorites?.includes(user?.uid)
+                            ? BiSolidHeart : BiHeart
+                        } 
                         onHandle={addToFavorites}
                         />
                     </div>
