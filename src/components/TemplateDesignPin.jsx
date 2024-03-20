@@ -2,10 +2,16 @@ import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { fadeInOutWithOpacity, scaleInOut } from '../animations';
 import { BiFolderPlus, BiHeart } from "react-icons/bi";
+import useUser from "../hooks/useUser";
+import { saveToCollections } from '../api';
 
 const TemplateDesignPin = ({ data, index }) => {
-    const addToCollection = async() => {
+    const {data: user, refetch : userRefetch} = useUser()
 
+    const addToCollection = async(e) => {
+        e.stopPropagation();
+        await saveToCollections(user, data);
+        userRefetch();
     };
 
     const addToFavorites = async() => {
