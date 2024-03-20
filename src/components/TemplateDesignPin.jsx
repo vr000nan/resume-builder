@@ -20,19 +20,27 @@ const TemplateDesignPin = ({ data, index }) => {
         <div className="w-full h-[500px] rounded-md bg-gray-200 overflow-hidden relative">
             <img 
             src={data?.imageURL} 
-            alt="image url" 
+            alt="template thumbnail" 
             className="w-full h-full object-cover"
             />
 
             <AnimatePresence>
                 <motion.div 
                 {...fadeInOutWithOpacity}
-                className="absolute inset-0 bg-[rgba(0, 0, 0, 0.4)] flex flex-col items-center justify-start px-4 py-3 z-50 cursor-pointer"
+                className="absolute inset-0 bg-[rgba(0,0,0,0.4)] flex flex-col items-center justify-start px-4 py-3 z-50 cursor-pointer"
                 >
                     <div className="flex flex-col items-end justify-start w-full gap-8">
-                        <InnerBoxCard label={"Add To Collection"} Icon={BiFolderPlus} onHandle={addToCollection}/>
+                        <InnerBoxCard 
+                        label={"Add To Collection"} 
+                        Icon={BiFolderPlus} 
+                        onHandle={addToCollection}
+                        />
 
-                        <InnerBoxCard label={"Add To Collection"} Icon={BiHeart} onHandle={addToCollection}/>
+                        <InnerBoxCard 
+                        label={"Add To Favorites"} 
+                        Icon={BiHeart} 
+                        onHandle={addToFavorites}
+                        />
                     </div>
                 </motion.div>
             </AnimatePresence>
@@ -55,7 +63,7 @@ const InnerBoxCard = ({ label, Icon, onHandle }) => {
                {isHovered && (
                  <motion.div 
                  initial={{opacity: 0, scale: 0.6, x: 50}}
-                 animatel={{opacity: 1, scale: 1, x: 0}}
+                 animate={{opacity: 1, scale: 1, x: 0}}
                  exit={{opacity: 0, scale: 0.6, x: 50}}
                  className="px-3 py-2 rounded-md bg-gray-200 absolute -left-44 after:w-2 after:h-2 after:bg-gray-200 after:absolute after:-right-1 after:top-[14px] after:rotate-45"
                  >
