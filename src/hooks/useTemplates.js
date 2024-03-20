@@ -25,4 +25,4 @@ export const useTemplates = () => {
     };
 };
 
-// export default useTemplates;
+export default useTemplates;
