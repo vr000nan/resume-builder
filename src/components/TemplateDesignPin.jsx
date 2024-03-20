@@ -9,6 +9,7 @@ import { saveToCollections, saveToFavorites } from '../api';
 const TemplateDesignPin = ({ data, index }) => {
     const {data: user, refetch : userRefetch} = useUser();
     const { refetch: temp_Refetch } = useTemplates();
+    const [isHovered, setIsHovered] = useState();
 
     const addToCollection = async(e) => {
         e.stopPropagation();
@@ -27,7 +28,11 @@ const TemplateDesignPin = ({ data, index }) => {
     key={data?._id}
     {...scaleInOut(index)}
     >
-        <div className="w-full h-[500px] rounded-md bg-gray-200 overflow-hidden relative">
+        <div 
+        className="w-full h-[500px] rounded-md bg-gray-200 overflow-hidden relative"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        >
             <img 
             src={data?.imageURL} 
             alt="template thumbnail" 
@@ -35,39 +40,42 @@ const TemplateDesignPin = ({ data, index }) => {
             />
 
             <AnimatePresence>
-                <motion.div 
-                {...fadeInOutWithOpacity}
-                className="absolute inset-0 bg-[rgba(0,0,0,0.4)] flex flex-col items-center justify-start px-4 py-3 z-50 cursor-pointer"
-                >
-                    <div className="flex flex-col items-end justify-start w-full gap-8">
-                        <InnerBoxCard 
-                        label={
-                            user?.collections?.includes(data?._id)
-                             ? "Added to Collections" 
-                             : "Add to Collections"
-                            } 
-                        Icon={
-                            user?.collections?.includes(data?._id)
-                            ? BiSolidFolderPlus : BiFolderPlus
-                        } 
-                        onHandle={addToCollection}
-                        />
-
-                        <InnerBoxCard 
-                        label={
-                            data?.favorites?.includes(user?.uid)
-                             ? "Added to Favoritess" 
-                             : "Add to Favoritess"
-                            } 
-                        Icon={
-                            data?.favorites?.includes(user?.uid)
-                            ? BiSolidHeart : BiHeart
-                        } 
-                        onHandle={addToFavorites}
-                        />
-                    </div>
-                </motion.div>
+                {isHovered && (
+                                   <motion.div 
+                                   {...fadeInOutWithOpacity}
+                                   className="absolute inset-0 bg-[rgba(0,0,0,0.4)] flex flex-col items-center justify-start px-4 py-3 z-50 cursor-pointer"
+                                   >
+                                       <div className="flex flex-col items-end justify-start w-full gap-8">
+                                           <InnerBoxCard 
+                                           label={
+                                               user?.collections?.includes(data?._id)
+                                                ? "Added to Collections" 
+                                                : "Add to Collections"
+                                               } 
+                                           Icon={
+                                               user?.collections?.includes(data?._id)
+                                               ? BiSolidFolderPlus : BiFolderPlus
+                                           } 
+                                           onHandle={addToCollection}
+                                           />
+                   
+                                           <InnerBoxCard 
+                                           label={
+                                               data?.favorites?.includes(user?.uid)
+                                                ? "Added to Favoritess" 
+                                                : "Add to Favoritess"
+                                               } 
+                                           Icon={
+                                               data?.favorites?.includes(user?.uid)
+                                               ? BiSolidHeart : BiHeart
+                                           } 
+                                           onHandle={addToFavorites}
+                                           />
+                                       </div>
+                                   </motion.div>
+                )}
             </AnimatePresence>
+
         </div>
     </motion.div>
   )
