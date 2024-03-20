@@ -5,11 +5,14 @@ import { BiFolderPlus, BiHeart, BiSolidFolderPlus, BiSolidHeart } from "react-ic
 import useUser from "../hooks/useUser";
 import useTemplates from "../hooks/useTemplates"
 import { saveToCollections, saveToFavorites } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 const TemplateDesignPin = ({ data, index }) => {
     const {data: user, refetch : userRefetch} = useUser();
     const { refetch: temp_Refetch } = useTemplates();
     const [isHovered, setIsHovered] = useState();
+
+    const navigate = useNavigate();
 
     const addToCollection = async(e) => {
         e.stopPropagation();
@@ -21,6 +24,10 @@ const TemplateDesignPin = ({ data, index }) => {
         e.stopPropagation();
         await saveToFavorites(user, data);
         temp_Refetch();
+    };
+
+    const handleRouteNavigation = () => {
+        navigate(`/resumeDetail/${data?._id}`, { replace: true });
     };
 
   return (
@@ -43,6 +50,7 @@ const TemplateDesignPin = ({ data, index }) => {
                 {isHovered && (
                                    <motion.div 
                                    {...fadeInOutWithOpacity}
+                                   onClick={handleRouteNavigation}
                                    className="absolute inset-0 bg-[rgba(0,0,0,0.4)] flex flex-col items-center justify-start px-4 py-3 z-50 cursor-pointer"
                                    >
                                        <div className="flex flex-col items-end justify-start w-full gap-8">
