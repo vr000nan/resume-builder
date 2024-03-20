@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { fadeInOutWithOpacity, scaleInOut } from '../animations';
-import { BiFolderPlus, BiHeart } from "react-icons/bi";
+import { BiFolderPlus, BiHeart, BiSolidFolderPlus } from "react-icons/bi";
 import useUser from "../hooks/useUser";
 import { saveToCollections } from '../api';
 
@@ -37,8 +37,15 @@ const TemplateDesignPin = ({ data, index }) => {
                 >
                     <div className="flex flex-col items-end justify-start w-full gap-8">
                         <InnerBoxCard 
-                        label={"Add To Collection"} 
-                        Icon={BiFolderPlus} 
+                        label={
+                            user?.collections?.includes(data?._id)
+                             ? "Added to Collections" 
+                             : "Add to Collections"
+                            } 
+                        Icon={
+                            user?.collections?.includes(data?._id)
+                            ? BiSolidFolderPlus : BiFolderPlus
+                        } 
                         onHandle={addToCollection}
                         />
 
