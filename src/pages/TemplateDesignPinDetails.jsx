@@ -155,8 +155,9 @@ const TemplateDesignPinDetails = () => {
               </div>
             
           </div>
+
+          
         </div>
-      </div>
 
 
       {/* right section */}
@@ -179,8 +180,10 @@ const TemplateDesignPinDetails = () => {
           </div>
         </div>
       </div>
+      </div>
       
      </div>
+     
 
   );
 }
