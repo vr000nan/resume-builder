@@ -179,8 +179,9 @@ const TemplateDesignPinDetails = () => {
           </div>
         </div>
       </div>
-
+      
      </div>
+
   );
 }
 
