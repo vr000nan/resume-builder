@@ -7,6 +7,7 @@ import { FaHouse } from 'react-icons/fa6';
 import { BiFolderPlus, BiHeart, BiSolidFolderPlus, BiSolidHeart } from 'react-icons/bi';
 import useUser from '../hooks/useUser';
 import useTemplates from '../hooks/useTemplates';
+import { DiscoverBg } from '../assets';
 
 const TemplateDesignPinDetails = () => {
   const { templateID } = useParams();
@@ -159,7 +160,26 @@ const TemplateDesignPinDetails = () => {
 
 
       {/* right section */}
-      <div className="col-span-1 lg:col-span-4">2</div>
+      <div className="col-span-1 lg:col-span-4 w-full flex flex-col items-center justify-start px-3 gap-6">
+        <div 
+        className="w-full h-72 bg-blue-200 rounded-md overflow-hidden relative"
+        style={{
+          background: `url(${DiscoverBg})`,
+          backgroundPosition: "center",
+          backgroundSize: "cover"
+        }}
+        >
+          <div className="absolute inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.4)]">
+            <Link 
+            to={"/"}
+            className="px-4 py-2 rounded-md border-2 border-gray-50 text-white"
+            >
+              Discover More
+            </Link>
+          </div>
+        </div>
+      </div>
+
      </div>
   );
 }
