@@ -2,12 +2,13 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import { Link, useParams } from 'react-router-dom';
 import { getTemplateDetails, saveToCollections, saveToFavorites } from '../api';
-import { MainSpinner } from "../components"
+import { MainSpinner, TemplateDesignPin } from "../components"
 import { FaHouse } from 'react-icons/fa6';
 import { BiFolderPlus, BiHeart, BiSolidFolderPlus, BiSolidHeart } from 'react-icons/bi';
 import useUser from '../hooks/useUser';
 import useTemplates from '../hooks/useTemplates';
 import { DiscoverBg } from '../assets';
+import { AnimatePresence } from 'framer-motion';
 
 const TemplateDesignPinDetails = () => {
   const { templateID } = useParams();
@@ -19,7 +20,7 @@ const TemplateDesignPinDetails = () => {
 
   const { data:user, refetch: userRefetch } = useUser();
 
-  const {data: template, refetch: temp_refetch, isLoading: temp_isLoading} = useTemplates();
+  const {data: templates, refetch: temp_refetch, isLoading: temp_isLoading} = useTemplates();
 
   const addToCollection = async (e) => {
     e.stopPropagation();
@@ -195,22 +196,43 @@ const TemplateDesignPinDetails = () => {
         {/* come back and fix when he scrolls down */}
         <div className="w-full flex items-center justify-start flex-wrap gap-2">
           {data?.tags?.map((tag, index) => {
+            return(
             <p
             className="text-xs border border-gray-300 px-2 py-1 rounded-md whitespace-nowrap"
             key={index}
             >
-              {data.tag}
+              {tag}
             </p>
-          })}
+          )})}
         </div>
       </div>
       </div>
 
-      {/* similar templates */}
-      
-     </div>
-     
+     {/* similar templates */}
+      {templates?.filter((temp) => temp._id !== data?._id).length > 0 && (
+        <div className="w-full py-8 flex flex-col items-start justify-start gap-4">
+          <p className="text-lg font-semibold text-txtDark">You might also like</p>
 
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-2">
+            <React.Fragment>
+                <AnimatePresence>
+                  {templates
+                  ?.filter((temp) => temp._id !== data?._id)
+                  .map((template, index) => (
+                    <TemplateDesignPin 
+                    key={template?._id} 
+                    data={template} 
+                    index={index}
+                    />
+                  ))}
+              </AnimatePresence>
+            </React.Fragment>
+          </div>
+        </div>
+      )}
+
+
+     </div>
   );
 }
 
