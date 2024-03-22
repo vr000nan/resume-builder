@@ -162,6 +162,7 @@ const TemplateDesignPinDetails = () => {
 
       {/* right section */}
       <div className="col-span-1 lg:col-span-4 w-full flex flex-col items-center justify-start px-3 gap-6">
+        {/* discover more */}
         <div 
         className="w-full h-72 bg-blue-200 rounded-md overflow-hidden relative"
         style={{
@@ -179,8 +180,33 @@ const TemplateDesignPinDetails = () => {
             </Link>
           </div>
         </div>
+
+        {/* edit the template */}
+        {user && (
+          <Link
+          className="w-full px-4 py-3 rounded-md flex items-center justify-center bg-emerald-500 cursor-pointer"
+          to={`/resume/${data?.name}?templateId=${templateID}`}
+          >
+            <p className="text-white font-semibold text-lg">Edit This Template</p>
+          </Link>
+        )}
+
+        {/* tags */}
+        {/* come back and fix when he scrolls down */}
+        <div className="w-full flex items-center justify-start flex-wrap gap-2">
+          {data?.tags?.map((tag, index) => {
+            <p
+            className="text-xs border border-gray-300 px-2 py-1 rounded-md whitespace-nowrap"
+            key={index}
+            >
+              {data.tag}
+            </p>
+          })}
+        </div>
       </div>
       </div>
+
+      {/* similar templates */}
       
      </div>
      
