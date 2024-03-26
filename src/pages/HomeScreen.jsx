@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { Header, MainSpinner } from '../components';
 import { Routes, Route } from 'react-router-dom';
-import { HomeContainer } from '../containers';
+import { Footer, HomeContainer } from '../containers';
 import { CreateResume, CreateTemplate, TemplateDesignPinDetails, UserProfile } from '../pages';
 
 const HomeScreen = () => {
@@ -19,6 +19,8 @@ const HomeScreen = () => {
           <Route path="/resume/*" element={<CreateResume/>} />
           <Route path="/resumeDetail/:templateID" element={<TemplateDesignPinDetails/>} />
         </Routes>
+
+        {/* <Footer /> */}
       </Suspense>
     </main>
     </div>
