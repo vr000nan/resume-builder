@@ -3,9 +3,11 @@ import BannerImg from "../assets/img/bannerImg.jpeg";
 import useUser from '../hooks/useUser';
 import AnonIcon from "../assets/img/anonIcon.png";
 import { AnimatePresence } from 'framer-motion';
-import { TemplateDesignPin } from '../components';
+import { MainSpinner, TemplateDesignPin } from '../components';
 import useTemplates from '../hooks/useTemplates';
 import { useNavigate } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import { getSavedResumes } from '../api';
 
 const UserProfile = () => {
   const {data: user} = useUser();
@@ -18,11 +20,17 @@ const UserProfile = () => {
     isError: temp_isError,
   } = useTemplates();
 
+  const {data: savedResumes} = useQuery(["savedResumes"], () => getSavedResumes(user?.uid));
+
   useEffect(() => {
     if(!user){
       navigate("/auth", {replace: true})
     }
-  })
+  });
+
+  if(temp_isLoading){
+    return <MainSpinner />;
+  }
 
   return (
     <div className="w-full flex flex-col items justify-start py-12">
@@ -97,7 +105,26 @@ const UserProfile = () => {
                   <RenderATemplate templates={templates?.filter(temp => 
                     user?.collections?.includes(temp?._id)
                     )}/> 
-                  : <div></div>
+                  : 
+                  <div 
+                  className="col-span-12 w-full flex flex-col items-center justify-center gap-3"
+                  >
+                    No Data.
+                  </div>
+                  }
+                </React.Fragment>
+              )}
+
+{activeTab === "resumes" && (
+                <React.Fragment>
+                  {savedResumes?.length > 0 && savedResumes ? 
+                  <RenderATemplate templates={savedResumes}/> 
+                  : 
+                  <div 
+                  className="col-span-12 w-full flex flex-col items-center justify-center gap-3"
+                  >
+                    No Data.
+                  </div>
                   }
                 </React.Fragment>
               )}
