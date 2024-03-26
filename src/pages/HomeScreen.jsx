@@ -20,7 +20,7 @@ const HomeScreen = () => {
           <Route path="/resumeDetail/:templateID" element={<TemplateDesignPinDetails/>} />
         </Routes>
 
-        {/* <Footer /> */}
+        <Footer />
       </Suspense>
     </main>
     </div>
